@@ -34,7 +34,7 @@ jobs:
         env:
           VITE_AD_CLIENT_ID: 10e6c79d-ddcb-49d6-b298-795b02f9120f
           VITE_AD_TENANT_ID: 12bbdfe3-f4de-44a6-9e17-e53ee2a6a3f9
-          VITE_AD_REDIRECT_URI: http://localhost:5173
+          VITE_AD_REDIRECT_URI: https://taskmesh.xyz
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
