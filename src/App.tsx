@@ -1,40 +1,29 @@
-import { InteractionStatus } from "@azure/msal-browser";
+import { InteractionType } from "@azure/msal-browser";
 import {
   AuthenticatedTemplate,
   UnauthenticatedTemplate,
-  useIsAuthenticated,
-  useMsal,
+  useMsalAuthentication,
 } from "@azure/msal-react";
+import React from "react";
 import { loginRequest } from "./authConfig";
-import Login from "./components/Login";
 
 export default function App() {
-  const isAuthenticated = useIsAuthenticated();
-  const { instance, inProgress } = useMsal();
-
-  const handleLogin = () => {
-    if (inProgress === InteractionStatus.None && !isAuthenticated) {
-      instance.loginRedirect(loginRequest).then();
-    }
-  };
-
-  let name;
-  if (isAuthenticated) {
-    const accounts = instance.getAllAccounts();
-    name = accounts[0].name;
-  }
+  const { login, result, error } = useMsalAuthentication(
+    InteractionType.Redirect,
+    loginRequest
+  );
 
   return (
-    <div>
-      <AuthenticatedTemplate>
-        <div className="flex flex-col justify-around h-screen p-3">
-          <h1 className="text-4xl mx-auto font-bold">taskmesh.xyz</h1>
-          <h3 className="text-xl mx-auto">Welcome, {name}.</h3>
-        </div>
-      </AuthenticatedTemplate>
-      <UnauthenticatedTemplate>
-        <Login handleLogin={() => handleLogin()} />
-      </UnauthenticatedTemplate>
-    </div>
+    <React.Fragment>
+      <div className="flex flex-col justify-around h-screen w-screen">
+        <div className="text-5xl font-bold mx-auto">taskmesh.xyz</div>
+        <AuthenticatedTemplate>
+          <div className="text-2xl font-bold mx-auto">Welcome.</div>
+        </AuthenticatedTemplate>
+        <UnauthenticatedTemplate>
+          <div className="text-2xl font-bold mx-auto">Loading...</div>
+        </UnauthenticatedTemplate>
+      </div>
+    </React.Fragment>
   );
 }
